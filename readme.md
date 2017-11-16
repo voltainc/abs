@@ -1,6 +1,6 @@
 # Artist Booking System
 
-Artist Booking System (ABS) enables you to book artists via system 
+Artist Booking System (ABS) enables you to book artists, keep a track of their schedules and much more
 
 ## Getting Started
 
