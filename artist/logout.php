@@ -1,0 +1,9 @@
+<?php 
+	session_start();
+	if(isset($_SESSION['artist'])){
+		unset($_SESSION['artist']);
+		header("location:../artist");
+	}else{
+		header("location:../artist");
+	}
+?>
