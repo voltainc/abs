@@ -169,6 +169,28 @@
 				
 			break;
 			
+			case "create_category":
+				
+				$content = trim(@$_REQUEST['content']);
+				if(!empty($content)){
+						$q = mysql_query("select * from category where content='{$content}'");
+						if(mysql_num_rows($q)){
+							echo json_encode(array("status"=>"error","message"=>"already exists"));
+						}else
+						{
+							if(mysql_query("insert into category values('','{$content}')")){
+								echo json_encode(array("status"=>"success"));
+							}else{
+								echo json_encode(array("status"=>"error","message"=>"error while creating sale"));
+							}
+						}
+					
+				}else{
+					echo json_encode(array("status"=>"error","message"=>"all fields required"));
+				}
+				
+			break;
+			
 			case "customer_verify":
 			
 				

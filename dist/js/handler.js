@@ -113,6 +113,50 @@ function validate_creds(arg){
 	
 }
 
+function table_operations(arg){
+	
+	// var data = jQuery.parseJSON(arg);
+	
+	switch(arg[0]){
+		
+		case "create_category":
+		
+			var content = $.trim($("#content").val());
+	
+					
+						
+								$.ajax	
+															(
+																	{
+																		type: "POST",
+																		url: "../assets/proc.php",
+																		data: "act=create_category&content="+content,
+																		cache: false,
+																		success: function(result){
+																			
+																			var data = jQuery.parseJSON(result);
+																			
+																				if(data['status']=='success')
+																				{
+																					window.location='category';	 
+																			
+																				}else{
+																					
+																						 $("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																				}
+																			
+																		}
+																	}
+															);
+						
+		
+		break;
+		
+	}
+	
+	
+	
+}
 
 function register(arg){
 
@@ -430,33 +474,13 @@ function clip_func(x){
 	//#arg id funcname params
 	switch(x[0]){
 		
-		case "clip_add_sale":
+		case "clip_add_category":
 			
-			$("#cash").val("")
-			$("#date").val("");
+			$("#content").val("")
 			$("#"+x[1]).attr("onclick",x[2]+x[3]);
 			
 		break;
-		
-		case "clip_edit_sale":
-			//1->sale 2->cash 3->credit 4->date
-			
-			// console.log(x);
-			
-			$("#cash").val(x[3][2])
-			$("#date").val(x[3][3]);
-			var z = JSON.stringify(x[3]);
-			
-			$("#"+x[1]).attr("onclick",x[2]+"("+z+")");
-		
-		break
-		
-		
-		
 	}
-	
-
-	
 }
 
 function redirect(arg){

@@ -147,6 +147,59 @@
 					
 				break;
 				
+				case "category_list":
+					
+						$q = mysql_query("select * from category order by id DESC");
+						if(mysql_num_rows($q)>0){
+							
+								?>
+								<div class="box">
+									<div class="box-header">
+									  <h3 class="box-title">Summary</h3>
+									  <button class="btn btn-xs btn-success pull-right " data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_category','operation','table_operations','(<?php echo json_encode(['create_category']);?>)'])>Add</button>
+									</div>
+									<!-- /.box-header -->
+									<div class="box-body">
+										<table class="table table-bordered table-striped datatable">
+											<thead>
+												<tr>
+												  <th>#</th>
+												  <th>Category</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+											  $count=1;
+											  while($result=mysql_fetch_assoc($q))
+											  {
+											?>
+												<tr>
+													<td><?php echo $count++;?></td>
+													<td><?php echo ucwords($result['content']);?></td>
+												</tr>
+											<?php
+											  }
+											 ?>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.box-body -->
+								</div>
+								<?php
+							
+							
+						}else{
+							?>
+								<div class="alert alert-warning alert-dismissible">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
+									<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_sale','operation','table_operations','(<?php echo json_encode(['create_sale']);?>)'])>Create</button>
+								</div>
+							<?php
+						}
+					
+				break;
+				
 				case "reset_question_customer":
 						
 						$q = mysql_query("select * from reset where type='customer' and user='{$arg[1]}'");
@@ -448,8 +501,9 @@
 							
 							case "admin":
 								
-								if($arr[2]=="dashboard"){$dashboard="class='active'";}
-								else{$dashboard="";}
+								if($arr[2]=="dashboard"){$dashboard="class='active'";$category="";}
+								elseif($arr[2]=="category"){$dashboard="";$category="class='active'";}
+								else{$dashboard="";$category="";}
 									return
 									"
 									 <aside class='main-sidebar'>
@@ -468,6 +522,11 @@
 												<li {$dashboard}>
 													<a href='dashboard'>
 														<i class='fa fa-dashboard'></i> <span>Dashboard</span>
+													</a>
+												</li>
+												<li {$category}>
+													<a href='category'>
+														<i class='fa fa-cog'></i> <span>Category</span>
 													</a>
 												</li>
 												
