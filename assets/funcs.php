@@ -193,7 +193,7 @@
 								<div class="alert alert-warning alert-dismissible">
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
-									<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_sale','operation','table_operations','(<?php echo json_encode(['create_sale']);?>)'])>Create</button>
+									<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_category','operation','table_operations','(<?php echo json_encode(['create_category']);?>)'])>Create</button>
 								</div>
 							<?php
 						}
