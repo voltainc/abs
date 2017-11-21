@@ -152,6 +152,40 @@ function table_operations(arg){
 		
 		break;
 		
+		case "create_event":
+		
+			var content = $.trim($("#content").val());
+			var cost = $.trim($("#cost").val());
+	
+					
+						
+								$.ajax	
+															(
+																	{
+																		type: "POST",
+																		url: "../assets/proc.php",
+																		data: "act=create_event&content="+content+"&cost="+cost,
+																		cache: false,
+																		success: function(result){
+																			
+																			var data = jQuery.parseJSON(result);
+																			
+																				if(data['status']=='success')
+																				{
+																					window.location='event';	 
+																			
+																				}else{
+																					
+																						 $("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																				}
+																			
+																		}
+																	}
+															);
+						
+		
+		break;
+		
 	}
 	
 	
@@ -475,6 +509,12 @@ function clip_func(x){
 	switch(x[0]){
 		
 		case "clip_add_category":
+			
+			$("#content").val("")
+			$("#"+x[1]).attr("onclick",x[2]+x[3]);
+			
+		break;
+		case "clip_add_event":
 			
 			$("#content").val("")
 			$("#"+x[1]).attr("onclick",x[2]+x[3]);

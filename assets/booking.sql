@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2017 at 05:30 PM
+-- Generation Time: Nov 21, 2017 at 05:22 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -72,14 +72,6 @@ CREATE TABLE `category` (
   `content` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`id`, `content`) VALUES
-(1, 'singer'),
-(2, 'actor');
-
 -- --------------------------------------------------------
 
 --
@@ -96,6 +88,18 @@ CREATE TABLE `customer` (
   `password` varchar(100) NOT NULL,
   `salt` varchar(100) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
   `reg_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event`
+--
+
+CREATE TABLE `event` (
+  `id` int(11) NOT NULL,
+  `content` varchar(100) NOT NULL,
+  `cost` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -161,6 +165,12 @@ ALTER TABLE `customer`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `event`
+--
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `question`
 --
 ALTER TABLE `question`
@@ -190,11 +200,16 @@ ALTER TABLE `artist`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `event`
+--
+ALTER TABLE `event`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `question`

@@ -2,10 +2,6 @@
 	
 	class main{
 		
-		function __construct(){
-			date_default_timezone_set('Asia/Dubai');
-		}
-		
 		function connect_db(){
 			
 				$host = "localhost";
@@ -194,6 +190,108 @@
 									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
 									<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_category','operation','table_operations','(<?php echo json_encode(['create_category']);?>)'])>Create</button>
+								</div>
+							<?php
+						}
+						break;
+						case "event_list":
+					
+						$q = mysql_query("select * from event order by id DESC");
+						if(mysql_num_rows($q)>0){
+							
+								?>
+								<div class="box">
+									<div class="box-header">
+									  <h3 class="box-title">Summary</h3>
+									  <button class="btn btn-xs btn-success pull-right " data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_event','operation','table_operations','(<?php echo json_encode(['create_event']);?>)'])>Add</button>
+									</div>
+									<!-- /.box-header -->
+									<div class="box-body">
+										<table class="table table-bordered table-striped datatable">
+											<thead>
+												<tr>
+												  <th>#</th>
+												  <th>Event</th>
+												  <th>Cost</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+											  $count=1;
+											  while($result=mysql_fetch_assoc($q))
+											  {
+											?>
+												<tr>
+													<td><?php echo $count++;?></td>
+													<td><?php echo ucwords($result['content']);?></td>
+													<td><?php echo ucwords($result['cost']);?></td>
+												</tr>
+											<?php
+											  }
+											 ?>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.box-body -->
+								</div>
+								<?php
+							
+							
+						}else{
+							?>
+								<div class="alert alert-warning alert-dismissible">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
+									<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#myModal" onclick=clip_func(['clip_add_event','operation','table_operations','(<?php echo json_encode(['create_event']);?>)'])>Create</button>
+								</div>
+							<?php
+						}
+						break;
+						
+						case "artist_list":
+					
+						$q = mysql_query("select * from artist order by id DESC");
+						if(mysql_num_rows($q)>0){
+							
+								?>
+								<div class="box">
+									<div class="box-header">
+									  <h3 class="box-title">Summary</h3>
+									<!-- /.box-header -->
+									<div class="box-body">
+										<table class="table table-bordered table-striped datatable">
+											<thead>
+												<tr>
+												  <th>#</th>
+												  <th>Artist</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+											  $count=1;
+											  while($result=mysql_fetch_assoc($q))
+											  {
+											?>
+												<tr>
+													<td><?php echo $count++;?></td>
+													<td><?php echo ucwords($result['name']);?></td>
+												</tr>
+											<?php
+											  }
+											 ?>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.box-body -->
+								</div>
+								<?php
+							
+							
+						}else{
+							?>
+								<div class="alert alert-warning alert-dismissible">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
 								</div>
 							<?php
 						}
@@ -392,7 +490,7 @@
 									return
 									"
 									 <header class='main-header'>
-										<a href='{$arr[2]}admin' class='logo'>
+										<a href='javascript:void(0)' class='logo'>
 										  <span class='logo-mini'><b>ABS</b></span>
 										  <span class='logo-lg'><b>A B S</b></span>
 										</a>
@@ -477,7 +575,7 @@
 										<section class='sidebar'>
 										  <div class='user-panel'>
 											<div class='pull-left image'>
-											  <img src='../dist/img/admin_avatar.jpg' class='img-circle' alt='User Image'>
+											  <img src='assets/{$_SESSION[$arr[3]]['id']}/pfp/{$_SESSION[$arr[3]]['id']}.jpg' class='img-circle' alt='User Image'>
 											</div>
 											<div class='pull-left info'>
 											  <p>".ucwords($_SESSION[$arr[3]]['name'])."</p>
@@ -501,9 +599,11 @@
 							
 							case "admin":
 								
-								if($arr[2]=="dashboard"){$dashboard="class='active'";$category="";}
-								elseif($arr[2]=="category"){$dashboard="";$category="class='active'";}
-								else{$dashboard="";$category="";}
+								if($arr[2]=="dashboard"){$dashboard="class='active'";$category="";$artist="";$event="";}
+								elseif($arr[2]=="category"){$dashboard="";$category="class='active'";$artist="";$event="";}
+								elseif($arr[2]=="artist"){$dashboard="";$category="";$artist="class='active'";$event="";}
+								elseif($arr[2]=="event"){$dashboard="";$category="";$artist="";$event="class='active'";}
+								else{$dashboard="";$category="";$artist="";$event="";}
 									return
 									"
 									 <aside class='main-sidebar'>
@@ -529,7 +629,16 @@
 														<i class='fa fa-cog'></i> <span>Category</span>
 													</a>
 												</li>
-												
+												<li {$event}>
+													<a href='event'>
+														<i class='fa fa-cog'></i> <span>Event</span>
+													</a>
+												</li>
+												<li {$artist}>
+													<a href='artist'>
+														<i class='fa fa-cog'></i> <span>Artist</span>
+													</a>
+												</li>
 										  </ul>
 										</section>
 									  </aside>

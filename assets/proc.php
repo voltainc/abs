@@ -181,7 +181,30 @@
 							if(mysql_query("insert into category values('','{$content}')")){
 								echo json_encode(array("status"=>"success"));
 							}else{
-								echo json_encode(array("status"=>"error","message"=>"error while creating sale"));
+								echo json_encode(array("status"=>"error","message"=>"error while creating category"));
+							}
+						}
+					
+				}else{
+					echo json_encode(array("status"=>"error","message"=>"all fields required"));
+				}
+				
+			break;
+			
+			case "create_event":
+				
+				$content = trim(@$_REQUEST['content']);
+				$cost = trim(@$_REQUEST['cost']);
+				if(!empty($content)){
+						$q = mysql_query("select * from event where content='{$content}'");
+						if(mysql_num_rows($q)){
+							echo json_encode(array("status"=>"error","message"=>"already exists"));
+						}else
+						{
+							if(mysql_query("insert into event values('','{$content}','{$cost}')")){
+								echo json_encode(array("status"=>"success"));
+							}else{
+								echo json_encode(array("status"=>"error","message"=>"error while creating event"));
 							}
 						}
 					
