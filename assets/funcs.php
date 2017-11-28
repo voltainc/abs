@@ -330,6 +330,14 @@
 					
 				break;
 				
+				case "artist_search_list":
+				
+					// $artist = $arg[1];
+					
+					// $q = mysql_query("SELECT * FROM booking where artist='{$artist}' '2017-11-21' between from_date and to_date OR '2017-11-23' between from_date and to_date");
+					
+				break;
+				
 				
 			}
 			
@@ -536,8 +544,9 @@
 							
 							case "customer":
 								
-								if($arr[2]=="dashboard"){$dashboard="class='active'";}
-								else{$dashboard="";}
+								if($arr[2]=="dashboard"){$dashboard="class='active'";$booking="";}
+								elseif($arr[2]=="booking"){$dashboard="";$booking="class='active'";}
+								else{$dashboard="";$booking="";}
 									return
 									"
 									 <aside class='main-sidebar'>
@@ -556,6 +565,11 @@
 												<li {$dashboard}>
 													<a href='dashboard'>
 														<i class='fa fa-dashboard'></i> <span>Dashboard</span>
+													</a>
+												</li>
+												<li {$booking}>
+													<a href='booking'>
+														<i class='fa fa-cog'></i> <span>Booking</span>
 													</a>
 												</li>
 										  </ul>

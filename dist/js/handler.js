@@ -503,6 +503,46 @@ function reset(arg){
 	
 }
 
+function retrieve(arg){
+	
+		switch(arg[0]){
+			
+			case "search_artist":
+				
+				
+				var category = $.trim($("#category").val());
+				var from = $.trim($("#from").val());
+				var to = $.trim($("#to").val());
+				$.ajax	
+											(
+													{
+														type: "POST",
+														url: "../assets/proc.php",
+														data: "act=search_artist&category="+category+"&from="+from+"&to="+to,
+														cache: false,
+														success: function(result){
+															
+															var data = jQuery.parseJSON(result);
+															
+																if(data['status']=='success')
+																{
+																	
+																	
+																}else{
+																	
+																		$("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																}
+															
+														}
+													}
+											);
+			
+			
+			break;
+			
+		}
+	
+}
 	
 function clip_func(x){
 	//#arg id funcname params

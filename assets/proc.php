@@ -141,7 +141,7 @@
 								echo json_encode(array("status"=>"error","message"=>"Email already exists"));
 							}else{
 								
-								if(mysql_query("insert into artist values ('','{$name}','{$age}','{$status}','{$skill}','{$origin}','{$category}','{$email}','{$password}','{$salt}',(current_timestamp))")){
+								if(mysql_query("insert into artist values ('','{$name}','{$age}','{$status}','{$skill}','{$origin}','{$category}','{$email}','{$password}','{$salt}',true,(current_timestamp))")){
 									
 									$user = $main->ret_by("artist","salt",$salt,"id");
 									if(mysql_query("insert into reset values('','artist','{$user}','{$question}','{$answer}',(current_timestamp))")){
@@ -332,6 +332,34 @@
 					}else{
 						echo json_encode(array("status"=>"error","message"=>"All fields required"));
 					}
+			break;
+			
+			
+			case "search_artist":
+			
+					// $category = trim(@$_REQUEST["category"]);
+					// $from = trim(@$_REQUEST["from"]);
+					// $to = trim(@$_REQUEST["to"]);
+					
+					// if(!empty($category) AND !empty($from) AND !empty($to)){
+						
+						// $q = mysql_query("select * from artist where category='{$category}' and status=true");
+						
+						// if(mysql_num_rows($q)){
+							
+							// while($result = mysql_fetch_assoc($q)){
+								
+									// $main->
+								
+							// }
+							
+						// }else{
+							// echo json_encode(array("status"=>"error","message"=>"No data found"));
+						// }
+						
+					// }else{
+						// echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					// }
 			break;
 			
 			

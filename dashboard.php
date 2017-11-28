@@ -18,7 +18,8 @@
       <h1>SALE</h1>
     </section>
     <section class="content">
-      
+                
+       
     </section>
   </div>
   <?php echo $static->footer(['inner','default']);?>
