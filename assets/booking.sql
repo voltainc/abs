@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2017 at 05:22 PM
+-- Generation Time: Dec 05, 2017 at 04:47 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -51,12 +51,31 @@ CREATE TABLE `artist` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `age` int(11) NOT NULL,
-  `status` varchar(100) NOT NULL,
+  `marital_status` varchar(100) NOT NULL,
   `skill` varchar(100) NOT NULL,
   `origin` varchar(100) NOT NULL,
   `category` int(11) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
+  `salt` varchar(100) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `reg_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `artist` int(11) NOT NULL,
+  `category` int(11) NOT NULL,
+  `from_date` date NOT NULL,
+  `to_date` date NOT NULL,
+  `status` int(11) NOT NULL,
   `salt` varchar(100) NOT NULL,
   `reg_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -98,8 +117,20 @@ CREATE TABLE `customer` (
 
 CREATE TABLE `event` (
   `id` int(11) NOT NULL,
-  `content` varchar(100) NOT NULL,
-  `cost` float NOT NULL
+  `content` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fee`
+--
+
+CREATE TABLE `fee` (
+  `id` int(11) NOT NULL,
+  `booking` int(11) NOT NULL,
+  `content` float NOT NULL,
+  `reg_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -153,6 +184,12 @@ ALTER TABLE `artist`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `category`
 --
 ALTER TABLE `category`
@@ -168,6 +205,12 @@ ALTER TABLE `customer`
 -- Indexes for table `event`
 --
 ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `fee`
+--
+ALTER TABLE `fee`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -197,6 +240,11 @@ ALTER TABLE `admin`
 ALTER TABLE `artist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
@@ -210,6 +258,11 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `fee`
+--
+ALTER TABLE `fee`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `question`

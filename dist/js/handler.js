@@ -155,7 +155,6 @@ function table_operations(arg){
 		case "create_event":
 		
 			var content = $.trim($("#content").val());
-			var cost = $.trim($("#cost").val());
 	
 					
 						
@@ -164,7 +163,7 @@ function table_operations(arg){
 																	{
 																		type: "POST",
 																		url: "../assets/proc.php",
-																		data: "act=create_event&content="+content+"&cost="+cost,
+																		data: "act=create_event&content="+content,
 																		cache: false,
 																		success: function(result){
 																			
@@ -177,6 +176,69 @@ function table_operations(arg){
 																				}else{
 																					
 																						 $("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																				}
+																			
+																		}
+																	}
+															);
+						
+		
+		break;
+		
+		case "create_fee":
+		
+			var content = $.trim($("#content").val());
+	
+					
+						
+								$.ajax	
+															(
+																	{
+																		type: "POST",
+																		url: "../assets/proc.php",
+																		data: "act=create_fee&booking="+arg[1]+"&content="+content,
+																		cache: false,
+																		success: function(result){
+																			
+																			var data = jQuery.parseJSON(result);
+																			
+																				if(data['status']=='success')
+																				{
+																					window.location='dashboard';	 
+																			
+																				}else{
+																					
+																						 $("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																				}
+																			
+																		}
+																	}
+															);
+						
+		
+		break;
+		
+		case "reject_booking":
+		
+						
+								$.ajax	
+															(
+																	{
+																		type: "POST",
+																		url: "../assets/proc.php",
+																		data: "act=reject_booking&booking="+arg[1],
+																		cache: false,
+																		success: function(result){
+																			
+																			var data = jQuery.parseJSON(result);
+																			
+																				if(data['status']=='success')
+																				{
+																					window.location='dashboard';	 
+																			
+																				}else{
+																					
+																						 $("#notify_2").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
 																				}
 																			
 																		}
@@ -517,7 +579,7 @@ function retrieve(arg){
 											(
 													{
 														type: "POST",
-														url: "../assets/proc.php",
+														url: "assets/proc.php",
 														data: "act=search_artist&category="+category+"&from="+from+"&to="+to,
 														cache: false,
 														success: function(result){
@@ -527,11 +589,90 @@ function retrieve(arg){
 																if(data['status']=='success')
 																{
 																	
+																	$("#result").html(data['message']);
+																	
+																}else{
+																	
+																		$("#result").html("<blockquote>"+data['message']+"</blockquote>"); 
+																}
+															
+														}
+													}
+											);
+			
+			
+			break;
+			
+			case "artist_profile":
+				
+				
+				var category = $.trim($("#category").val());
+				
+				$.ajax	
+											(
+													{
+														type: "POST",
+														url: "assets/proc.php",
+														data: "act=artist_profile&artist="+arg[1],
+														cache: false,
+														success: function(result){
+																	
+																	$("#artist_profile").html(result);
+															
+														}
+													}
+											);
+			
+			
+			break;
+			
+			case "create_booking":
+				
+				var category = $.trim($("#category").val());
+				var from = $.trim($("#from").val());
+				var to = $.trim($("#to").val());
+				$.ajax	
+											(
+													{
+														type: "POST",
+														url: "assets/proc.php",
+														data: "act=create_booking&artist="+arg[1]+"&category="+category+"&from="+from+"&to="+to,
+														cache: false,
+														success: function(result){
+															
+															var data = jQuery.parseJSON(result);
+															
+																if(data['status']=='success')
+																{
+																	
+																	retrieve(['search_artist']);
+																	
 																	
 																}else{
 																	
 																		$("#notify").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
 																}
+															
+														}
+													}
+											);
+			
+			
+			break;
+			
+			case "invoice":
+				
+				$.ajax	
+											(
+													{
+														type: "POST",
+														url: "assets/proc.php",
+														data: "act=invoice&booking="+arg[1],
+														cache: false,
+														success: function(result){
+															
+															$("#booking_invoice").html(result);
+															
 															
 														}
 													}
@@ -557,6 +698,17 @@ function clip_func(x){
 		case "clip_add_event":
 			
 			$("#content").val("")
+			$("#"+x[1]).attr("onclick",x[2]+x[3]);
+			
+		break;
+		case "clip_add_fee":
+			
+			$("#content").val("")
+			$("#"+x[1]).attr("onclick",x[2]+x[3]);
+			
+		break;
+		case "clip_reject_booking":
+			
 			$("#"+x[1]).attr("onclick",x[2]+x[3]);
 			
 		break;

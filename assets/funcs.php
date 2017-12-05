@@ -212,7 +212,6 @@
 												<tr>
 												  <th>#</th>
 												  <th>Event</th>
-												  <th>Cost</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -224,7 +223,6 @@
 												<tr>
 													<td><?php echo $count++;?></td>
 													<td><?php echo ucwords($result['content']);?></td>
-													<td><?php echo ucwords($result['cost']);?></td>
 												</tr>
 											<?php
 											  }
@@ -298,6 +296,146 @@
 					
 				break;
 				
+				case "recent_booking_customer":
+						
+						$q = mysql_query("select * from booking where customer = '{$arg[1]} 'order by id DESC");
+						if(mysql_num_rows($q)>0){
+							
+								?>
+								<div class="box">
+									<div class="box-header">
+									  <h3 class="box-title">Recent Bookings</h3>
+									<!-- /.box-header -->
+									<div class="box-body">
+										<table class="table table-bordered table-striped datatable">
+											<thead>
+												<tr>
+												  <th>#</th>
+												  <th>Artist</th>
+												  <th>From</th>
+												  <th>To</th>
+												  <th>Status</th>
+												  <th>Created</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+											  $count=1;
+											  while($result=mysql_fetch_assoc($q))
+											  {
+											?>
+												<tr>
+													<td><?php echo $count++;?></td>
+													<td>
+														<button class='btn btn-xs btn-primary' data-toggle='modal' data-target='#myModal' onclick=retrieve(['artist_profile','<?php echo $result['artist']; ?>'])><?php echo ucwords($this->ret_by("artist","id",$result['artist'],"name")); ?></button>
+													</td>
+													<td><?php echo date("d, M Y",strtotime($result['from_date']));?></td>
+													<td><?php echo date("d, M Y",strtotime($result['to_date']));?></td>
+													<td><?php echo $this->retrieve(['customer_booking_status',$result['status'],$result['id']]);?></td>
+													<td><?php echo date("d, M Y",strtotime($result['reg_date']));?></td>
+												</tr>
+											<?php
+											  }
+											 ?>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.box-body -->
+								</div>
+								<?php
+							
+							
+						}else{
+							?>
+								<div class="alert alert-warning alert-dismissible">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
+								</div>
+							<?php
+						}
+					
+				break;
+				
+				case "recent_booking_artist":
+						
+						$q = mysql_query("select * from booking where artist = '{$arg[1]}' and status=0 order by id DESC");
+						if(mysql_num_rows($q)>0){
+							
+								?>
+								<div class="box">
+									<div class="box-header">
+									  <h3 class="box-title">Recent Bookings</h3>
+									<!-- /.box-header -->
+									<div class="box-body">
+										<table class="table table-bordered table-striped datatable">
+											<thead>
+												<tr>
+												  <th>#</th>
+												  <th>Customer</th>
+												  <th>From</th>
+												  <th>To</th>
+												  <th>Created</th>
+												  <th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											<?php
+											  $count=1;
+											  while($result=mysql_fetch_assoc($q))
+											  {
+											?>
+												<tr>
+													<td><?php echo $count++;?></td>
+													<td><?php echo ucwords($this->ret_by("customer","id",$result['customer'],"name"));?></td>
+													<td><?php echo date("d, M Y",strtotime($result['from_date']));?></td>
+													<td><?php echo date("d, M Y",strtotime($result['to_date']));?></td>
+													<td><?php echo date("d, M Y",strtotime($result['reg_date']));?></td>
+													<td><button class="btn btn-success btn-xs" data-toggle="modal" data-target="#approve_booking" onclick=clip_func(['clip_add_fee','operation','table_operations','(<?php echo json_encode(['create_fee',$result['id']]);?>)'])>Approve</button>&nbsp;<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#reject_booking" onclick=clip_func(['clip_reject_booking','operation_2','table_operations','(<?php echo json_encode(['reject_booking',$result['id']]);?>)'])>Reject</button></td>
+												</tr>
+											<?php
+											  }
+											 ?>
+											</tbody>
+										</table>
+									</div>
+									<!-- /.box-body -->
+								</div>
+								<?php
+							
+							
+						}else{
+							?>
+								<div class="alert alert-warning alert-dismissible">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<h4><i class="icon fa fa-warning"></i> Empty!</h4>
+								</div>
+							<?php
+						}
+					
+				break;
+				
+				case "customer_booking_status":
+						
+						switch($arg[1]){
+							
+							case "0":
+								return "<label class='label label-warning'>Waiting</label>";
+							break;
+							
+							case "1":
+								return "<a href='javascript:void(0)'class='label label-success' data-toggle='modal' data-target='#invoice' onclick=retrieve(['invoice',{$arg[2]}])>Accepted</a>";
+							break;
+							
+							case "2":
+								return "<label class='label label-danger'>Rejected</label>";
+							break;
+							
+							
+						}
+					
+				break;
+				
+				
 				case "reset_question_customer":
 						
 						$q = mysql_query("select * from reset where type='customer' and user='{$arg[1]}'");
@@ -331,10 +469,11 @@
 				break;
 				
 				case "artist_search_list":
-				
-					// $artist = $arg[1];
+					$q = mysql_query("SELECT * FROM booking where '{$arg[1]}' BETWEEN from_date and to_date OR '{$arg[2]}' BETWEEN from_date and to_date");
 					
-					// $q = mysql_query("SELECT * FROM booking where artist='{$artist}' '2017-11-21' between from_date and to_date OR '2017-11-23' between from_date and to_date");
+								if(!mysql_num_rows($q)){
+									return true;
+								}
 					
 				break;
 				

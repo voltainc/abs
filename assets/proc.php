@@ -194,14 +194,13 @@
 			case "create_event":
 				
 				$content = trim(@$_REQUEST['content']);
-				$cost = trim(@$_REQUEST['cost']);
 				if(!empty($content)){
 						$q = mysql_query("select * from event where content='{$content}'");
 						if(mysql_num_rows($q)){
 							echo json_encode(array("status"=>"error","message"=>"already exists"));
 						}else
 						{
-							if(mysql_query("insert into event values('','{$content}','{$cost}')")){
+							if(mysql_query("insert into event values('','{$content}')")){
 								echo json_encode(array("status"=>"success"));
 							}else{
 								echo json_encode(array("status"=>"error","message"=>"error while creating event"));
@@ -337,29 +336,221 @@
 			
 			case "search_artist":
 			
-					// $category = trim(@$_REQUEST["category"]);
-					// $from = trim(@$_REQUEST["from"]);
-					// $to = trim(@$_REQUEST["to"]);
+					$category = trim(@$_REQUEST["category"]);
+					$from = trim(@$_REQUEST["from"]);
+					$to = trim(@$_REQUEST["to"]);
 					
-					// if(!empty($category) AND !empty($from) AND !empty($to)){
+					// print_r($_REQUEST);
+					// exit();
+					
+					if(!empty($category) AND !empty($from) AND !empty($to)){
 						
-						// $q = mysql_query("select * from artist where category='{$category}' and status=true");
+						$q = mysql_query("select * from artist where category='{$category}' and status=true");
 						
-						// if(mysql_num_rows($q)){
+						if(mysql_num_rows($q)){
 							
-							// while($result = mysql_fetch_assoc($q)){
+							$from_date = date("Y-m-d",strtotime($from));
+							$to_date = date("Y-m-d",strtotime($to));
+							while($result = mysql_fetch_assoc($q)){
+								$arr="";
+								if($main->retrieve(['artist_search_list',$from_date,$to_date])){
+									$arr.= 
+													"
+														<div class='col-md-4'>
+														  <!-- Widget: user widget style 1 -->
+														  <div class='box box-widget widget-user-2'>
+															<!-- Add the bg color to the header using any of the bg-* classes -->
+															<div class='widget-user-header bg-black'>
+															  <div class='widget-user-image'>
+																<img class='img-circle' src='artist/assets/{$result['id']}/pfp/{$result['id']}.jpg' alt='User Avatar'>
+															  </div>
+															  <!-- /.widget-user-image -->
+															  <h3 class='widget-user-username'>".ucwords($result['name'])."</h3>
+															  <h5 class='widget-user-desc'><button class='btn btn-xs btn-primary' data-toggle='modal' data-target='#myModal' onclick=retrieve(['artist_profile','".$result['id']."'])>Request booking</button></h5>
+															</div>
+														   
+														  </div>
+														  <!-- /.widget-user -->
+														</div>
+													";
+								}
 								
-									// $main->
-								
-							// }
-							
-						// }else{
-							// echo json_encode(array("status"=>"error","message"=>"No data found"));
-						// }
+							}
+							if($arr!=""){
+								echo json_encode(array("status"=>"success","message"=>$arr));
+							}else{
+								echo json_encode(array("status"=>"success","message"=>"<blockquote>Empty</blockquote>"));
+							}
+
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"No data found"));
+						}
 						
-					// }else{
-						// echo json_encode(array("status"=>"error","message"=>"All fields required"));
-					// }
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "artist_profile":
+			
+					$artist = trim(@$_REQUEST["artist"]);
+					if(!empty($artist)){
+					
+						$q = mysql_query("select * from artist where id='{$artist}'");
+								
+						if(mysql_num_rows($q)){
+								$result = mysql_fetch_assoc($q);
+								?>
+								
+									
+									<div class="box box-primary">
+										<div class="box-body box-profile">
+										  <img class="profile-user-img img-responsive img-circle" src='artist/assets/<?php echo $result['id']; ?>/pfp/<?php echo $result['id']; ?>.jpg' alt="User profile picture">
+
+										  <h3 class="profile-username text-center"><?php echo ucwords($result['name'])?></h3>
+
+										  <p class="text-muted text-center"><?php echo $main->ret_by("category","id",$result['category'],"content") ?></p>
+
+										  <ul class="list-group list-group-unbordered">
+											<li class="list-group-item">
+											  <b>Age</b> <a class="pull-right"><?php echo $result['age']?></a>
+											</li>
+											<li class="list-group-item">
+											  <b>Marital Status</b> <a class="pull-right"><?php echo ucwords($result['marital_status']);?></a>
+											</li>
+											<li class="list-group-item">
+											  <b>Skill</b> <a class="pull-right"><?php echo ucwords($result['skill'])?></a>
+											</li>
+											<li class="list-group-item">
+											  <b>Origin</b> <a class="pull-right"><?php echo ucwords($result['origin']);?></a>
+											</li>
+											<li class="list-group-item">
+											  <b>Email</b> <a class="pull-right"><?php echo $result['email']?></a>
+											</li>
+										  </ul>
+										  <button class="btn btn-success btn-block" onclick=retrieve(['create_booking',<?php echo $result['id']; ?>]) data-dismiss="modal"><b>Book</b></button>
+										</div>
+										<!-- /.box-body -->
+									</div>
+																
+								
+								<?php								
+								
+						}
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "create_booking":
+			
+					$artist = trim(@$_REQUEST["artist"]);
+					$category = trim(@$_REQUEST["category"]);
+					$from = trim(@$_REQUEST["from"]);
+					$to = trim(@$_REQUEST["to"]);
+					if(!empty($artist) AND !empty($category) AND !empty($from) AND !empty($to)){
+						session_start();
+						$from_date = date("Y-m-d",strtotime($from));
+						$to_date = date("Y-m-d",strtotime($to));
+						$salt = $main->saltish('booking',15);
+						$q = mysql_query("insert into booking values('','{$_SESSION['customer']['id']}','{$artist}','{$category}','{$from_date}','{$to_date}',0,'{$salt}',(current_timestamp))");
+						if($q){
+							echo json_encode(array("status"=>"success","message"=>""));
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"An error occured while processing"));
+						}
+						
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "create_fee":
+			
+					$booking = trim(@$_REQUEST["booking"]);
+					$content = trim(@$_REQUEST["content"]);
+					
+					if(!empty($booking) AND !empty($content)){
+						
+						$q = mysql_query("insert into fee values('','{$booking}','{$content}',(current_timestamp))");
+						if($q){
+							mysql_query("update booking set status=1 where id='{$booking}'");
+							echo json_encode(array("status"=>"success","message"=>""));
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"An error occured"));
+						}
+						
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "reject_booking":
+			
+					$booking = trim(@$_REQUEST["booking"]);
+					
+					if(!empty($booking)){
+						
+						$q = mysql_query("update booking set status=2 where id='{$booking}'");
+						if($q){
+							echo json_encode(array("status"=>"success","message"=>""));
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"An error occured"));
+						}
+						
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "invoice":
+			
+					$booking = trim(@$_REQUEST["booking"]);
+					
+					
+					if(!empty($booking)){
+						
+						$q = mysql_query("select * from booking where id='{$booking}'");
+						if(mysql_num_rows($q)){
+							$result = mysql_fetch_assoc($q);
+							?>
+								
+								
+									  <table class="table table-responsive table-striped">
+										
+										<tr>
+										<th>Artist</th>
+										  <td><?php echo ucwords($main->ret_by("artist","id",$result['artist'],"name"));?></td>
+										</tr>
+										<tr> 
+										<th>From</th>
+										  <td><?php echo date("d, M Y",strtotime($result['from_date']));?></td>
+										</tr>
+										<tr> 
+										<th>To</th>
+										  <td><?php echo date("d, M Y",strtotime($result['to_date']));?></td>
+										</tr>
+										<tr>
+										<th>Fee</th>
+										  <td><?php echo ucwords($main->ret_by("fee","id",$result['id'],"content"));?></td>
+										</tr>
+										<tr> 
+										<th>Created</th>
+										  <td><?php echo date("d, M Y",strtotime($result['reg_date']));?></td>
+										</tr>
+										
+									  </table>
+								
+							
+							
+							<?php
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"An error occured"));
+						}
+						
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
 			break;
 			
 			

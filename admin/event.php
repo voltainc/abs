@@ -19,7 +19,9 @@
     </section>
     <section class="content">
       <?php $main->retrieve(['event_list'])?>
+
     </section>
+	
   </div>
   <?php echo $static->footer(['inner','default']);?>
   <div class="control-sidebar-bg"></div>
@@ -37,9 +39,6 @@
               <div class="box-body">
                 <div class="form-group">
                   <input type="text" class="form-control" id="content" placeholder="Enter Event Name">
-                </div>
-				 <div class="form-group">
-                  <input type="number" class="form-control" id="cost" placeholder="Enter Event Cost">
                 </div>
               </div>
         </div>

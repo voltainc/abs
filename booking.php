@@ -69,8 +69,43 @@
         <!-- /.box-body -->
       
     </div>
+	<div class="box box-default">
+        <div class="box-header with-border">
+          <h3 class="box-title">Results</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row" id="result">
+            <blockquote>Empty</blockquote>
+          </div>
+          <!-- /.row -->
+        </div>
+        <!-- /.box-body -->
+      
+    </div>
 	  
     </section>
+	
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Profile</h4>
+      </div>
+      <div class="modal-body">
+        <div class="block">
+		<span id="notify"></span>
+              <div class="box-body" id="artist_profile"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 	
   </div>
   <?php echo $static->footer(['inner','default']);?>

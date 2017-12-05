@@ -15,15 +15,51 @@
   <?php echo $static->sidebar(['inner','customer','dashboard','customer']);?>
   <div class="content-wrapper">
     <section class="content-header">
-      <h1>SALE</h1>
+      <h1>Dashboard</h1>
     </section>
     <section class="content">
                 
+				<?php echo $main->retrieve(['recent_booking_customer',$_SESSION['customer']['id']]);?>
        
     </section>
   </div>
   <?php echo $static->footer(['inner','default']);?>
   <div class="control-sidebar-bg"></div>
+</div>
+<div class="modal fade" id="invoice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Invoice</h4>
+      </div>
+      <div class="modal-body">
+        <div class="block">
+			<span id="notify"></span>
+              <div class="box-body" id="booking_invoice">
+                
+              </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Profile</h4>
+      </div>
+      <div class="modal-body">
+        <div class="block">
+		<span id="notify"></span>
+              <div class="box-body" id="artist_profile"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php echo $static->jslib(['inner','default',''])?>
 </body>
