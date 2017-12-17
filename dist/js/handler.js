@@ -248,6 +248,36 @@ function table_operations(arg){
 		
 		break;
 		
+		case "delete_booking":
+		
+						
+								$.ajax	
+															(
+																	{
+																		type: "POST",
+																		url: "assets/proc.php",
+																		data: "act=delete_booking&booking="+arg[1],
+																		cache: false,
+																		success: function(result){
+																			
+																			var data = jQuery.parseJSON(result);
+																			
+																				if(data['status']=='success')
+																				{
+																					window.location='dashboard';	 
+																			
+																				}else{
+																					
+																						 $("#notify_2").html("<div class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"+data['message']+"</div>"); 
+																				}
+																			
+																		}
+																	}
+															);
+						
+		
+		break;
+		
 	}
 	
 	
@@ -712,6 +742,11 @@ function clip_func(x){
 			$("#"+x[1]).attr("onclick",x[2]+x[3]);
 			
 		break;
+		case "clip_delete_booking":
+			
+			$("#"+x[1]).attr("onclick",x[2]+x[3]);
+			
+		break;
 	}
 }
 
@@ -730,6 +765,11 @@ function redirect(arg){
 	}
 }
 
-$('.datepicker').datepicker({
-      autoclose: true
-    });
+jQuery('.dtpickerwt').datetimepicker({
+  timepicker:true,
+  format:'Y/m/d H:i',
+});
+jQuery('.dtpickerwd').datetimepicker({
+  timepicker:false,
+  format:'Y/m/d',
+});

@@ -42,14 +42,14 @@
 			<div class="col-md-2">
               <div class="form-group">
                 <label>From</label>
-                <input type="text" id="from" class="form-control datepicker" />
+                <input type="text" id="from" class="form-control dtpickerwt" />
               </div>
               <!-- /.form-group -->
             </div>
 			<div class="col-md-2">
               <div class="form-group">
                 <label>To</label>
-                <input type="text" id="to" class="form-control datepicker" />
+                <input type="text" id="to" class="form-control dtpickerwt" />
               </div>
               <!-- /.form-group -->
             </div>

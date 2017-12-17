@@ -379,7 +379,7 @@
 							if($arr!=""){
 								echo json_encode(array("status"=>"success","message"=>$arr));
 							}else{
-								echo json_encode(array("status"=>"success","message"=>"<blockquote>Empty</blockquote>"));
+								echo json_encode(array("status"=>"success","message"=>"<blockquote>No data found</blockquote>"));
 							}
 
 						}else{
@@ -450,8 +450,8 @@
 					$to = trim(@$_REQUEST["to"]);
 					if(!empty($artist) AND !empty($category) AND !empty($from) AND !empty($to)){
 						session_start();
-						$from_date = date("Y-m-d",strtotime($from));
-						$to_date = date("Y-m-d",strtotime($to));
+						$from_date = date("Y-m-d H:i:S",strtotime($from));
+						$to_date = date("Y-m-d H:i:s",strtotime($to));
 						$salt = $main->saltish('booking',15);
 						$q = mysql_query("insert into booking values('','{$_SESSION['customer']['id']}','{$artist}','{$category}','{$from_date}','{$to_date}',0,'{$salt}',(current_timestamp))");
 						if($q){
@@ -494,6 +494,29 @@
 						$q = mysql_query("update booking set status=2 where id='{$booking}'");
 						if($q){
 							echo json_encode(array("status"=>"success","message"=>""));
+						}else{
+							echo json_encode(array("status"=>"error","message"=>"An error occured"));
+						}
+						
+					}else{
+						echo json_encode(array("status"=>"error","message"=>"All fields required"));
+					}
+			break;
+			
+			case "delete_booking":
+			
+					$booking = trim(@$_REQUEST["booking"]);
+					
+					if(!empty($booking)){
+						
+						
+						if(mysql_query("delete from booking where id='{$booking}'")){
+							if(mysql_query("delete from fee where booking='{$booking}'")){
+								echo json_encode(array("status"=>"success","message"=>""));
+							}else{
+								echo json_encode(array("status"=>"error","message"=>"An error occured"));
+							}
+							
 						}else{
 							echo json_encode(array("status"=>"error","message"=>"An error occured"));
 						}

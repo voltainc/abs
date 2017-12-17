@@ -316,6 +316,7 @@
 												  <th>To</th>
 												  <th>Status</th>
 												  <th>Created</th>
+												  <th>Option</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -333,6 +334,9 @@
 													<td><?php echo date("d, M Y",strtotime($result['to_date']));?></td>
 													<td><?php echo $this->retrieve(['customer_booking_status',$result['status'],$result['id']]);?></td>
 													<td><?php echo date("d, M Y",strtotime($result['reg_date']));?></td>
+													<td>
+														<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_booking" onclick=clip_func(['clip_delete_booking','operation','table_operations','(<?php echo json_encode(['delete_booking',$result['id']]);?>)'])>Delete</button>
+													</td>
 												</tr>
 											<?php
 											  }
@@ -564,6 +568,7 @@
 										  <link rel='stylesheet' href='{$arr[2]}dist/css/skins/_all-skins.min.css'>
 										  <link rel='stylesheet' href='{$arr[2]}plugins/datatables/dataTables.bootstrap.css'>
 										  <link rel='stylesheet' href='{$arr[2]}plugins/datepicker/datepicker3.css'>
+										  <link rel='stylesheet' href='{$arr[2]}dist/css/jquery.datetimepicker.css'>
 										  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 										  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 										  <!--[if lt IE 9]>
@@ -608,6 +613,7 @@
 									<script src='{$arr[2]}plugins/datatables/jquery.dataTables.min.js'></script>
 									<script src='{$arr[2]}plugins/datatables/dataTables.bootstrap.min.js'></script>
 									<script src='{$arr[2]}plugins/datepicker/bootstrap-datepicker.js'></script>
+									<script src='{$arr[2]}dist/js/jquery.datetimepicker.full.min.js'></script>
 									<script src='{$arr[2]}dist/js/handler.js'></script>
 									
 									";
